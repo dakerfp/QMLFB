@@ -1,26 +1,21 @@
-import Qt 4.7
-import QtWebKit 2.1
+import QtQuick 1.0
 
 Rectangle {
     id: main
     width: 320
     height: 480
 
-    property string fbid: facebook.user_facebook_id
-    property string fbtoken: facebook.user_facebook_token
-    property bool logged_in: facebook.user_is_authenticated
-    property string name: ""
-
     Flipable {
         id: container
         height: main.height;
         width: parent.width;
         property int angle: 0
-        property bool flipped: !main.logged_in
+        property bool flipped: true
 
-        // FRONT SIDE HAS SOME APPLICATION
+        // FRONT SIDE HAS APPLICATION
         front:  Rectangle {
             id: basic_view
+
             anchors.fill: parent
             gradient: Gradient {
                 GradientStop { position: 0; color: "black" }
@@ -36,7 +31,6 @@ Rectangle {
 
             Image {
                 id: my_picture
-                source: facebook.my_pic_url
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -51,20 +45,24 @@ Rectangle {
             }
         }
 
-        // BACK SIDE HAS THAT FACEBOOK LOGIN
+        // BACK SIDE HAS FACEBOOK LOGIN
         back:  Rectangle {
                 height: main.height;
                 width: main.width;
 
                 Facebook {
                     id: facebook
-                    property string facebook_display_style: "touch" // or "wap"
-                    property string facebook_application_id: "<YOUR FACEBOOK APP ID>"
+
+                    anchors.fill: parent
+                    property string displayStyle: "touch" // or "wap"
+                    property string applicationId: "<APP ID>"
 
                     onUserAuthenticated: {
-                        console.log("do something if u want to.");
-                        console.log("user_id: " + user_id);
-                        console.log("user_token: " + user_token);
+                        console.log("Do something if you want to.");
+                        console.log("userId: " + userId);
+                        console.log("token: " + token);
+                        my_picture.source = facebook.myPicture();
+                        container.flipped = !container.flipped;
                     }
                 }
         }
@@ -89,4 +87,7 @@ Rectangle {
 
     }
 
+    Component.onCompleted: {
+        facebook.authenticate();
+    }
 }
