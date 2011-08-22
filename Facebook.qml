@@ -12,6 +12,7 @@ import "helpers.js" as Helpers
 
 WebView {
     id: fbAuth
+
     url: fb_app_id && !fb_app_id.match("<YOUR FACEBOOK APP ID>") ? fb_authentication_url : ""
     anchors.fill: parent
     settings.javascriptEnabled: false //false
@@ -21,7 +22,7 @@ WebView {
     property string fb_response_type: "token"
     property string fb_scope: "user_about_me"
     property string fb_authentication_url: "https://www.facebook.com/dialog/oauth?client_id="+fb_app_id+"&redirect_uri="+fb_redirect_url+"&display="+fb_display+"&response_type="+fb_response_type+"&scope="+fb_scope
-    property string fb_logout_url: "https://api.facebook.com/restserver.php?access_token="+main.user_facebook_token+"&method=auth.expireSession&format=json"
+    property string fb_logout_url: "https://api.facebook.com/restserver.php?access_token="+fbAuth.user_facebook_token+"&method=auth.expireSession&format=json"
     property string user_facebook_id: ""
     property string user_facebook_token: ""
     property variant me: ""
