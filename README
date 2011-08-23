@@ -2,6 +2,7 @@
 *
 *
 *   QMLFB version 0.1b by Jesse Ikonen
+*   QMLFB version 0.2 by Daker Fernandes
 *  =======================================*
 *
 *	Simple QML Component that authenticates your users using Facebook Graph.
@@ -16,23 +17,29 @@ Usage:
 
     Facebook {
         id: facebook
-        property string facebook_display_style: "touch" // or "wap"
-        property string facebook_application_id: "<YOUR FB APP ID HERE>"
 
-        function whenUserIsAuthenticated(userid, usertoken){
-            // access graph to get my name
-            my_graph(function(){main.name = this["name"]});
-        }
+        displayStyle: "touch" // or "wap"
+        applicationId: "<YOUR FB APP ID HERE>"
+	scope: ["user_aboute_me", "friends_about_me"] // Application permissions
+
+	onUserAuthenticated: {
+            myGraph(function() {
+		main.name = this["name"];
+	    });
+        }      
     }
 
 
 * Some properties you can hook into:
 
-    facebook.user_is_authenticated	=> returns if user is authenticated or not (bool)
-    facebook.user_facebook_id		=> returns user fb id
-    facebook.user_facebook_token	=> returns user fb token
-    facebook.my_pic_url 		=> returns your picture url (string)
-    facebook.me		=> returns your fb graph data (variant) so you can do things like, text: facebook.me.name
+    facebook.isAuthenticated	        => returns if user is authenticated or not (bool)
+    facebook.userId			=> returns user facebook id
+    facebook.token			=> returns user facebook token
+    facebook.me				=> returns your facebook graph data (variant) so you can do things like, text: facebook.me.name
+
+* Some functions you can use:
+ 
+    facebook.myPicture() 		=> returns your picture url
 
 * Access functions to graph are not done yet, but you can use getJSON helper from helpers.js if you really need something else.
 
